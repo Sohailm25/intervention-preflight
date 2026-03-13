@@ -113,6 +113,31 @@ def check_batch_single_parity(
     return report
 
 
+def check_cache_parity(
+    prompts: Sequence[Any],
+    *,
+    run_with_cache: Callable[[Sequence[Any]], Sequence[Any]],
+    run_without_cache: Callable[[Sequence[Any]], Sequence[Any]],
+    delta_fn: Callable[[Any, Any], float] | None = None,
+    tolerance: float = 0.0,
+    top_k_examples: int = 5,
+) -> dict[str, Any]:
+    cached_outputs = list(run_with_cache(prompts))
+    uncached_outputs = list(run_without_cache(prompts))
+    report = compare_output_sequences(
+        cached_outputs,
+        uncached_outputs,
+        delta_fn=delta_fn,
+        tolerance=tolerance,
+        left_label="cached_output",
+        right_label="uncached_output",
+        check_name="cache_parity",
+        top_k_examples=top_k_examples,
+    )
+    report["details"]["prompt_count"] = len(prompts)
+    return report
+
+
 def compare_position_modes(
     mode_outputs: dict[str, Sequence[Any]],
     *,
@@ -167,6 +192,7 @@ def compare_position_modes(
 
 __all__ = [
     "check_batch_single_parity",
+    "check_cache_parity",
     "compare_output_sequences",
     "compare_position_modes",
     "default_delta",

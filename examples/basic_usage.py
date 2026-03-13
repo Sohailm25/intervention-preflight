@@ -11,6 +11,7 @@ from intervention_preflight import (
     audit_prompt_sets,
     audit_reconstruction,
     check_batch_single_parity,
+    check_cache_parity,
 )
 
 
@@ -34,6 +35,13 @@ def main() -> None:
         run_batch=run_batch,
     )
     print("parity_report:", parity_report["status"], parity_report["metrics"])
+
+    cache_report = check_cache_parity(
+        ["alpha", "beta"],
+        run_with_cache=run_batch,
+        run_without_cache=run_batch,
+    )
+    print("cache_report:", cache_report["status"], cache_report["metrics"])
 
     reconstruction_report = audit_reconstruction(
         original=[1.0, 2.0, 3.0],

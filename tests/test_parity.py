@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from intervention_preflight.parity import (
     check_batch_single_parity,
+    check_cache_parity,
     compare_output_sequences,
     compare_position_modes,
 )
@@ -46,3 +47,23 @@ def test_compare_position_modes_reports_worst_pair() -> None:
     assert report["status"] == "warn"
     assert report["summary"]["worst_pair"] is not None
     assert report["metrics"]["pair_count"] == 3
+
+
+def test_check_cache_parity_surfaces_cached_drift() -> None:
+    prompts = ["alpha", "beta"]
+
+    def run_with_cache(values: list[str]) -> list[str]:
+        return [value.upper() for value in values]
+
+    def run_without_cache(values: list[str]) -> list[str]:
+        return [value.upper() for value in values[:1]] + ["DRIFT"]
+
+    report = check_cache_parity(
+        prompts,
+        run_with_cache=run_with_cache,
+        run_without_cache=run_without_cache,
+        tolerance=0.0,
+    )
+    assert report["status"] == "warn"
+    assert report["metrics"]["failing_count"] == 1
+    assert report["details"]["prompt_count"] == 2

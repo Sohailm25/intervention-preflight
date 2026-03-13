@@ -19,6 +19,7 @@ from intervention_preflight.judges import (
 )
 from intervention_preflight.parity import (
     check_batch_single_parity,
+    check_cache_parity,
     compare_output_sequences,
     compare_position_modes,
     default_delta,
@@ -44,6 +45,7 @@ __all__ = [
     "audit_reconstruction",
     "build_report",
     "check_batch_single_parity",
+    "check_cache_parity",
     "compare_metadata",
     "compare_output_sequences",
     "compare_position_modes",

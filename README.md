@@ -20,6 +20,12 @@ See [DESIGN.md](DESIGN.md) for the initial design.
 pip install -e ".[dev]"
 ```
 
+Optional backend extras:
+
+```bash
+pip install -e ".[dev,transformerlens]"
+```
+
 ## CLI
 
 ```bash
@@ -36,6 +42,7 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 - `intervention_preflight.reconstruction`
 - `intervention_preflight.stats`
 - `intervention_preflight.report`
+- `intervention_preflight.adapters`
 
 ## Quickstart
 
@@ -43,6 +50,7 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 from intervention_preflight import (
     audit_prompt_sets,
     check_batch_single_parity,
+    check_cache_parity,
     audit_reconstruction,
 )
 
@@ -64,9 +72,37 @@ parity_report = check_batch_single_parity(
     run_batch=run_batch,
 )
 
+cache_report = check_cache_parity(
+    ["alpha", "beta"],
+    run_with_cache=run_batch,
+    run_without_cache=run_batch,
+)
+
 reconstruction_report = audit_reconstruction(
     original=[1.0, 2.0, 3.0],
     reconstructed=[1.0, 2.1, 2.9],
+)
+```
+
+## Adapter Example
+
+```python
+from intervention_preflight import check_batch_single_parity, check_cache_parity
+from intervention_preflight.adapters import make_transformerlens_adapter, require_cache_controls
+
+adapter = make_transformerlens_adapter(model, prepend_bos=True, output_position="last")
+cache_runner = require_cache_controls(adapter)
+
+batch_report = check_batch_single_parity(
+    prompts,
+    run_single=adapter.run_single,
+    run_batch=adapter.run_batch,
+)
+
+cache_report = check_cache_parity(
+    prompts,
+    run_with_cache=lambda batch: cache_runner(batch, True),
+    run_without_cache=lambda batch: cache_runner(batch, False),
 )
 ```
 
