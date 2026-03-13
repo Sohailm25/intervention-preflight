@@ -41,6 +41,7 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 - `intervention_preflight.controls`
 - `intervention_preflight.judges`
 - `intervention_preflight.reconstruction`
+- `intervention_preflight.saelens`
 - `intervention_preflight.stats`
 - `intervention_preflight.report`
 - `intervention_preflight.adapters`
@@ -55,6 +56,7 @@ from intervention_preflight import (
     check_batch_single_parity,
     check_cache_parity,
     audit_reconstruction,
+    audit_saelens_preflight,
     render_markdown_summary,
 )
 
@@ -99,6 +101,22 @@ suite_report = aggregate_reports(
 markdown = render_markdown_summary(suite_report)
 ```
 
+## SAELens Preflight Example
+
+```python
+from intervention_preflight import audit_saelens_preflight
+
+report = audit_saelens_preflight(
+    sae,
+    model=model,
+    activations=layer_acts,
+    expected_metadata={
+        "model_name": "google/gemma-2-2b",
+        "hook_name": "blocks.12.hook_resid_post",
+    },
+)
+```
+
 ## Upstream Targeting
 
 The first upstream-facing slice is aimed at public tool regressions where exact activation values are too brittle:
@@ -109,6 +127,8 @@ The first upstream-facing slice is aimed at public tool regressions where exact 
 
 See [docs/upstream/neuronpedia.md](docs/upstream/neuronpedia.md) for the first concrete external integration target.
 The first PR-ready packet is in [docs/upstream/neuronpedia_pr1.md](docs/upstream/neuronpedia_pr1.md).
+The second upstream-facing target is SAELens preflight and reconstruction hygiene in [docs/upstream/saelens.md](docs/upstream/saelens.md).
+The SAELens PR packet is in [docs/upstream/saelens_pr1.md](docs/upstream/saelens_pr1.md).
 
 ## Adapter Example
 

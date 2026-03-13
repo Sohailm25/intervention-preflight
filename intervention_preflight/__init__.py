@@ -35,6 +35,13 @@ from intervention_preflight.reconstruction import (
     compare_reconstruction_modes,
     reconstruction_metrics,
 )
+from intervention_preflight.saelens import (
+    audit_saelens_hook_compatibility,
+    audit_saelens_metadata,
+    audit_saelens_preflight,
+    audit_saelens_reconstruction,
+    extract_saelens_metadata,
+)
 from intervention_preflight.report import (
     aggregate_reports,
     build_report,
@@ -55,6 +62,10 @@ __all__ = [
     "audit_prompt_collection",
     "audit_prompt_sets",
     "audit_reconstruction",
+    "audit_saelens_hook_compatibility",
+    "audit_saelens_metadata",
+    "audit_saelens_preflight",
+    "audit_saelens_reconstruction",
     "compare_activation_arrays",
     "build_report",
     "check_batch_single_parity",
@@ -66,6 +77,7 @@ __all__ = [
     "concentration_summary",
     "default_delta",
     "effect_size_summary",
+    "extract_saelens_metadata",
     "extract_score_json",
     "lexical_similarity",
     "load_jsonl_rows",
