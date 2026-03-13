@@ -1,0 +1,46 @@
+"""Minimal usage examples for intervention-preflight."""
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from intervention_preflight import (
+    audit_prompt_sets,
+    audit_reconstruction,
+    check_batch_single_parity,
+)
+
+
+def main() -> None:
+    prompt_report = audit_prompt_sets(
+        primary_rows=[{"user_query": "Tell me about Paris."}],
+        heldout_rows=[{"user_query": "I heard Paris is in France. Tell me about it."}],
+        similarity_threshold=0.75,
+    )
+    print("prompt_report:", prompt_report["status"], prompt_report["metrics"])
+
+    def run_single(prompt: str) -> str:
+        return prompt.upper()
+
+    def run_batch(prompts: list[str]) -> list[str]:
+        return [prompt.upper() for prompt in prompts]
+
+    parity_report = check_batch_single_parity(
+        ["alpha", "beta"],
+        run_single=run_single,
+        run_batch=run_batch,
+    )
+    print("parity_report:", parity_report["status"], parity_report["metrics"])
+
+    reconstruction_report = audit_reconstruction(
+        original=[1.0, 2.0, 3.0],
+        reconstructed=[1.0, 2.1, 2.9],
+    )
+    print("reconstruction_report:", reconstruction_report["status"], reconstruction_report["metrics"])
+
+
+if __name__ == "__main__":
+    main()
