@@ -12,6 +12,11 @@ from intervention_preflight.controls import (
     orthogonalize_vector,
     summarize_off_target_effects,
 )
+from intervention_preflight.judges import (
+    extract_score_json,
+    parse_score_with_fallback,
+    summarize_parsed_scores,
+)
 from intervention_preflight.parity import (
     check_batch_single_parity,
     compare_output_sequences,
@@ -46,12 +51,15 @@ __all__ = [
     "concentration_summary",
     "default_delta",
     "effect_size_summary",
+    "extract_score_json",
     "lexical_similarity",
     "load_jsonl_rows",
     "orthogonalize_vector",
+    "parse_score_with_fallback",
     "random_baseline_selectivity",
     "reconstruction_metrics",
     "summarize_off_target_effects",
+    "summarize_parsed_scores",
     "summarize_status_counts",
     "write_json_report",
 ]
