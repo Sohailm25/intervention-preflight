@@ -6,6 +6,12 @@ from intervention_preflight.prompt_audit import (
     lexical_similarity,
     load_jsonl_rows,
 )
+from intervention_preflight.controls import (
+    assess_retention,
+    assess_selective_intervention,
+    orthogonalize_vector,
+    summarize_off_target_effects,
+)
 from intervention_preflight.parity import (
     check_batch_single_parity,
     compare_output_sequences,
@@ -26,6 +32,8 @@ from intervention_preflight.stats import (
 )
 
 __all__ = [
+    "assess_retention",
+    "assess_selective_intervention",
     "audit_prompt_collection",
     "audit_prompt_sets",
     "audit_reconstruction",
@@ -40,8 +48,10 @@ __all__ = [
     "effect_size_summary",
     "lexical_similarity",
     "load_jsonl_rows",
+    "orthogonalize_vector",
     "random_baseline_selectivity",
     "reconstruction_metrics",
+    "summarize_off_target_effects",
     "summarize_status_counts",
     "write_json_report",
 ]

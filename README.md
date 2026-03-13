@@ -24,6 +24,7 @@ pip install -e ".[dev]"
 
 - `intervention_preflight.prompt_audit`
 - `intervention_preflight.parity`
+- `intervention_preflight.controls`
 - `intervention_preflight.reconstruction`
 - `intervention_preflight.stats`
 - `intervention_preflight.report`
