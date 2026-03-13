@@ -20,6 +20,13 @@ See [DESIGN.md](DESIGN.md) for the initial design.
 pip install -e ".[dev]"
 ```
 
+## CLI
+
+```bash
+ipf collection-audit --input prompts.jsonl
+ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.json
+```
+
 ## Current Modules
 
 - `intervention_preflight.prompt_audit`
