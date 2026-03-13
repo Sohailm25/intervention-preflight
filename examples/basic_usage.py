@@ -8,10 +8,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from intervention_preflight import (
+    aggregate_reports,
     audit_prompt_sets,
     audit_reconstruction,
     check_batch_single_parity,
     check_cache_parity,
+    render_markdown_summary,
 )
 
 
@@ -48,6 +50,13 @@ def main() -> None:
         reconstructed=[1.0, 2.1, 2.9],
     )
     print("reconstruction_report:", reconstruction_report["status"], reconstruction_report["metrics"])
+
+    suite_report = aggregate_reports(
+        "basic_usage_suite",
+        [prompt_report, parity_report, cache_report, reconstruction_report],
+    )
+    print("suite_report:", suite_report["status"], suite_report["summary"])
+    print(render_markdown_summary(suite_report))
 
 
 if __name__ == "__main__":

@@ -30,7 +30,13 @@ from intervention_preflight.reconstruction import (
     compare_reconstruction_modes,
     reconstruction_metrics,
 )
-from intervention_preflight.report import build_report, summarize_status_counts, write_json_report
+from intervention_preflight.report import (
+    aggregate_reports,
+    build_report,
+    render_markdown_summary,
+    summarize_status_counts,
+    write_json_report,
+)
 from intervention_preflight.stats import (
     concentration_summary,
     effect_size_summary,
@@ -40,6 +46,7 @@ from intervention_preflight.stats import (
 __all__ = [
     "assess_retention",
     "assess_selective_intervention",
+    "aggregate_reports",
     "audit_prompt_collection",
     "audit_prompt_sets",
     "audit_reconstruction",
@@ -59,6 +66,7 @@ __all__ = [
     "orthogonalize_vector",
     "parse_score_with_fallback",
     "random_baseline_selectivity",
+    "render_markdown_summary",
     "reconstruction_metrics",
     "summarize_off_target_effects",
     "summarize_parsed_scores",

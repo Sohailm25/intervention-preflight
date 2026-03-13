@@ -48,10 +48,12 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 
 ```python
 from intervention_preflight import (
+    aggregate_reports,
     audit_prompt_sets,
     check_batch_single_parity,
     check_cache_parity,
     audit_reconstruction,
+    render_markdown_summary,
 )
 
 prompt_report = audit_prompt_sets(
@@ -82,6 +84,12 @@ reconstruction_report = audit_reconstruction(
     original=[1.0, 2.0, 3.0],
     reconstructed=[1.0, 2.1, 2.9],
 )
+
+suite_report = aggregate_reports(
+    "demo_suite",
+    [prompt_report, parity_report, cache_report, reconstruction_report],
+)
+markdown = render_markdown_summary(suite_report)
 ```
 
 ## Adapter Example

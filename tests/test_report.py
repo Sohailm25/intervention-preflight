@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import json
 
-from intervention_preflight.report import build_report, summarize_status_counts, write_json_report
+from intervention_preflight.report import (
+    aggregate_reports,
+    build_report,
+    render_markdown_summary,
+    summarize_status_counts,
+    write_json_report,
+)
 
 
 def test_build_report_enforces_status_and_shape(tmp_path) -> None:
@@ -32,3 +38,33 @@ def test_summarize_status_counts_counts_known_statuses() -> None:
     assert counts["pass"] == 2
     assert counts["warn"] == 1
     assert counts["fail"] == 1
+
+
+def test_aggregate_reports_uses_worst_status_and_preserves_children() -> None:
+    aggregate = aggregate_reports(
+        "example_suite",
+        [
+            build_report(check="parity", status="pass"),
+            build_report(check="reconstruction", status="warn"),
+        ],
+    )
+    assert aggregate["status"] == "warn"
+    assert aggregate["summary"]["report_count"] == 2
+    assert aggregate["details"]["failing_checks"] == ["reconstruction"]
+    assert aggregate["metadata"]["report_type"] == "suite"
+
+
+def test_render_markdown_summary_renders_core_sections() -> None:
+    report = build_report(
+        check="cache_parity",
+        status="warn",
+        summary={"prompt_count": 2},
+        metrics={"max_delta": 0.4},
+        notes=["cached and uncached outputs diverged"],
+    )
+    rendered = render_markdown_summary(report)
+    assert "## cache_parity" in rendered
+    assert "- Status: `warn`" in rendered
+    assert "- Prompt Count: `2`" in rendered
+    assert "- max_delta: `0.4`" in rendered
+    assert "- cached and uncached outputs diverged" in rendered
