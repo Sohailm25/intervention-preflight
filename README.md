@@ -36,6 +36,7 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 ## Current Modules
 
 - `intervention_preflight.prompt_audit`
+- `intervention_preflight.activations`
 - `intervention_preflight.parity`
 - `intervention_preflight.controls`
 - `intervention_preflight.judges`
@@ -50,6 +51,7 @@ ipf prompt-audit --primary train.jsonl --heldout heldout.jsonl --output audit.js
 from intervention_preflight import (
     aggregate_reports,
     audit_prompt_sets,
+    compare_activation_arrays,
     check_batch_single_parity,
     check_cache_parity,
     audit_reconstruction,
@@ -85,12 +87,27 @@ reconstruction_report = audit_reconstruction(
     reconstructed=[1.0, 2.1, 2.9],
 )
 
+activation_report = compare_activation_arrays(
+    [[1.0, 0.0, 0.8], [0.2, 1.5, 0.1]],
+    [[0.9, 0.0, 0.7], [0.1, 1.6, 0.2]],
+)
+
 suite_report = aggregate_reports(
     "demo_suite",
-    [prompt_report, parity_report, cache_report, reconstruction_report],
+    [prompt_report, parity_report, cache_report, reconstruction_report, activation_report],
 )
 markdown = render_markdown_summary(suite_report)
 ```
+
+## Upstream Targeting
+
+The first upstream-facing slice is aimed at public tool regressions where exact activation values are too brittle:
+
+- use `check_cache_parity` for cache-on vs cache-off generation invariance
+- use `check_batch_single_parity` for batch vs single prompt invariance
+- use `compare_activation_arrays` when you need activation checks that validate structure without pinning exact floating-point values
+
+See [docs/upstream/neuronpedia.md](docs/upstream/neuronpedia.md) for the first concrete external integration target.
 
 ## Adapter Example
 

@@ -13,6 +13,7 @@ from intervention_preflight import (
     audit_reconstruction,
     check_batch_single_parity,
     check_cache_parity,
+    compare_activation_arrays,
     render_markdown_summary,
 )
 
@@ -51,9 +52,15 @@ def main() -> None:
     )
     print("reconstruction_report:", reconstruction_report["status"], reconstruction_report["metrics"])
 
+    activation_report = compare_activation_arrays(
+        [[1.0, 0.0, 0.8], [0.2, 1.5, 0.1]],
+        [[0.9, 0.0, 0.7], [0.1, 1.6, 0.2]],
+    )
+    print("activation_report:", activation_report["status"], activation_report["metrics"])
+
     suite_report = aggregate_reports(
         "basic_usage_suite",
-        [prompt_report, parity_report, cache_report, reconstruction_report],
+        [prompt_report, parity_report, cache_report, reconstruction_report, activation_report],
     )
     print("suite_report:", suite_report["status"], suite_report["summary"])
     print(render_markdown_summary(suite_report))

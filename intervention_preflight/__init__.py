@@ -1,5 +1,10 @@
 """Lightweight preflight checks for intervention-based mech interp workflows."""
 
+from intervention_preflight.activations import (
+    compare_activation_arrays,
+    summarize_activation_array,
+    topk_index_overlap,
+)
 from intervention_preflight.prompt_audit import (
     audit_prompt_collection,
     audit_prompt_sets,
@@ -50,6 +55,7 @@ __all__ = [
     "audit_prompt_collection",
     "audit_prompt_sets",
     "audit_reconstruction",
+    "compare_activation_arrays",
     "build_report",
     "check_batch_single_parity",
     "check_cache_parity",
@@ -68,8 +74,10 @@ __all__ = [
     "random_baseline_selectivity",
     "render_markdown_summary",
     "reconstruction_metrics",
+    "summarize_activation_array",
     "summarize_off_target_effects",
     "summarize_parsed_scores",
     "summarize_status_counts",
+    "topk_index_overlap",
     "write_json_report",
 ]
