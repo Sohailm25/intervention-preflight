@@ -108,6 +108,7 @@ The first upstream-facing slice is aimed at public tool regressions where exact 
 - use `compare_activation_arrays` when you need activation checks that validate structure without pinning exact floating-point values
 
 See [docs/upstream/neuronpedia.md](docs/upstream/neuronpedia.md) for the first concrete external integration target.
+The first PR-ready packet is in [docs/upstream/neuronpedia_pr1.md](docs/upstream/neuronpedia_pr1.md).
 
 ## Adapter Example
 

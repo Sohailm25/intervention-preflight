@@ -135,3 +135,5 @@ Do not start with:
 - changing all snapshot-style completion tests at once
 
 The first PR should be narrow and obviously defensible.
+
+For the concrete first packet, see [neuronpedia_pr1.md](./neuronpedia_pr1.md).
